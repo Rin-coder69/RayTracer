@@ -3,6 +3,7 @@
 #include "Renderer.h"
 #include "Framebuffer.h"
 #include <glm/glm.hpp>
+#include "Camera.h"
 
 int main() {
 	constexpr int SCREEN_WIDTH = 800;
@@ -14,6 +15,12 @@ int main() {
 	renderer.CreateWindow("Ray Tracer", SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Framebuffer framebuffer(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	// framebuffer width divided by framebuffer height (float division)
+	float aspectRatio = static_cast<float>(framebuffer.width) / static_cast<float>(framebuffer.height);
+	Camera camera(70.0f, aspectRatio);
+	camera.SetView({ 0, 0, 5 }, { 0, 0, 0 });
+
 
 	SDL_Event event;
 	bool quit = false;
