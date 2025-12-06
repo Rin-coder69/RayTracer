@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include "Camera.h"
 #include "Random.h"
-#include "Scene.h"
+#include "Material.h"
 
 int main() {
 	constexpr int SCREEN_WIDTH = 800;
@@ -29,9 +29,23 @@ int main() {
 
 	Scene scene;
 
+	// create various materials
+	auto redLambert = std::make_shared<Lambertian>(color3_t{ 1.0f, 0.0f, 0.0f });
+	auto greenLambert = std::make_shared<Lambertian>(color3_t{ 0.0f, 1.0f, 0.0f });
+	auto shinyMetal = std::make_shared<Metal>(color3_t{ 0.8f, 0.8f, 0.9f }, 0.05f);
+	auto glass = std::make_shared<Dielectric>(color3_t{ 1.0f, 1.0f, 1.0f }, 1.5f);
+	auto emissiveLight = std::make_shared<Emissive>(color3_t{ 4.0f, 3.0f, 2.0f }, 1.0f);
+
+	std::vector<std::shared_ptr<Material>> materials = {
+		redLambert, greenLambert, shinyMetal, glass, emissiveLight
+	};
+
+	// add several spheres with different materials
 	for (int i = 0; i < 5; ++i) {
 		glm::vec3 position = random::getReal(glm::vec3{ -3.0f }, glm::vec3{ 3.0f });
-		auto sphere = std::make_unique<Sphere>(position, 1.0f, color3_t{ 1, 0, 0 });
+		float radius = 0.7f + 0.3f * (i % 3);
+		auto mat = materials[i % static_cast<int>(materials.size())];
+		auto sphere = std::make_unique<Sphere>(position, radius, mat);
 		scene.AddObject(std::move(sphere));
 	}
 
@@ -52,7 +66,7 @@ int main() {
 
 		// draw to frame buffer
 		framebuffer.Clear({ 0, 0, 0, 255 });
-		scene.Render(framebuffer, camera);
+		scene.Render(framebuffer, camera, 50);
 		// update frame buffer, copy buffer pixels to texture
 		framebuffer.Update();
 

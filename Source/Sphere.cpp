@@ -1,4 +1,4 @@
-#include "Sphere.h"
+#include "sphere.h"
 #include "Ray.h"
 #include <glm/glm.hpp>
 #include <cmath>
@@ -33,9 +33,8 @@ bool Sphere::Hit(const Ray& ray, float minDistance, float maxDistance, raycastHi
         raycastHit.distance = t;
         raycastHit.point = ray.at(t);
         raycastHit.normal = (raycastHit.point - position) / radius;
-
-        // set raycastHit.color from normal (maps [-1,1] -> [0,1])
-        raycastHit.color = 0.5f * (raycastHit.normal + color3_t{ 1.0f });
+        // set the material pointer from this object's material
+        raycastHit.material = material.get();
         return true;
     }
 
@@ -45,9 +44,7 @@ bool Sphere::Hit(const Ray& ray, float minDistance, float maxDistance, raycastHi
         raycastHit.distance = t;
         raycastHit.point = ray.at(t);
         raycastHit.normal = (raycastHit.point - position) / radius;
-
-        // set raycastHit.color from normal (maps [-1,1] -> [0,1])
-        raycastHit.color = 0.5f * (raycastHit.normal + color3_t{ 1.0f });
+        raycastHit.material = material.get();
         return true;
     }
 
