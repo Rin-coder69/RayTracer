@@ -4,6 +4,8 @@
 #include <glm/gtc/constants.hpp>    
 #include <cstdlib>
 #include <random>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/norm.hpp>
 
 /// <summary>
 /// Random number generation utilities namespace providing convenient functions
@@ -142,4 +144,18 @@ namespace random {
         // cos(θ) gives x-component, sin(θ) gives y-component
         return glm::vec2{std::cosf(radians), std::sinf(radians)};
     }
+
+    inline glm::vec3 inUnitSphere() {
+        glm::vec3 v;
+        do {
+            v = getReal(glm::vec3{ -1 }, glm::vec3{ 1 });
+		} while (glm::length2(v) > 1.0);
+        {
+            return v;
+        }
+        inline glm::vec3 onUnitSphere();{
+            return glm::normalize(inUnitSphere());
+        }
+	}
+
 }

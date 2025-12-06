@@ -1,9 +1,15 @@
 #include <iostream>
 #include <SDL3/SDL.h>
 #include "Renderer.h"
+#include "sphere.h"
+#include "Scene.h"
+#include "Object.h"
+#include "Ray.h"
 #include "Framebuffer.h"
 #include <glm/glm.hpp>
 #include "Camera.h"
+#include "Random.h"
+#include "Scene.h"
 
 int main() {
 	constexpr int SCREEN_WIDTH = 800;
@@ -21,6 +27,13 @@ int main() {
 	Camera camera(70.0f, aspectRatio);
 	camera.SetView({ 0, 0, 5 }, { 0, 0, 0 });
 
+	Scene scene;
+
+	for (int i = 0; i < 5; ++i) {
+		glm::vec3 position = random::getReal(glm::vec3{ -3.0f }, glm::vec3{ 3.0f });
+		auto sphere = std::make_unique<Sphere>(position, 1.0f, color3_t{ 1, 0, 0 });
+		scene.AddObject(std::move(sphere));
+	}
 
 	SDL_Event event;
 	bool quit = false;
@@ -39,8 +52,7 @@ int main() {
 
 		// draw to frame buffer
 		framebuffer.Clear({ 0, 0, 0, 255 });
-		for (int i = 0; i < 300; i++) framebuffer.DrawPoint(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT, { 255, 255, 255, 255 });
-
+		scene.Render(framebuffer, camera);
 		// update frame buffer, copy buffer pixels to texture
 		framebuffer.Update();
 
