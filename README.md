@@ -100,3 +100,4 @@ Concepts of ray tracing are inspired by foundational resources like Ray Tracing 
 Ray Tracing in One Weekend
 
 The repository structure and build setup follow standard C++ project conventions.
+<img width="795" height="645" alt="Screenshot 2025-12-10 203128" src="https://github.com/user-attachments/assets/ed8644b9-3b56-49fc-8892-488dc461ae1a" />
